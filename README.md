@@ -22,12 +22,10 @@ Flix is an app that allows users to browse movies from the [The Movie Database A
 - [ ] (2pts) For popular movies (i.e. a movie voted for more than 5 stars), the full backdrop image is displayed. Otherwise, a poster image, the movie title, and overview is listed. Use Heterogenous RecyclerViews and use different ViewHolder layout files for popular movies and less popular ones.
 
 ### App Walkthough GIF
-`TODO://` Add the URL to your animated app walkthough `gif` in the image tag below, `YOUR_GIF_URL_HERE`. Make sure the gif actually renders and animates when viewing this README. (🚫 Remove this paragraph after after adding gif)
-
-<img src="YOUR_GIF_URL_HERE" width=250><br>
+<img src="walkthrough2.gif" width=250><br>
 
 ### Notes
-Android Studio target API level 30 would give a runtime error, but changing to API level 28 worked fine. Renaming a project in Android Studio is a bit of a hassle but the solution I found [here](https://stackoverflow.com/questions/18276872/change-project-name-on-android-studio).
+Android Studio target API level 30 would give a runtime error on startup, but changing to API level 28 worked fine. Renaming a project in Android Studio is a bit of a hassle but the solution I found [here](https://stackoverflow.com/questions/18276872/change-project-name-on-android-studio).
 
 ### Open-source libraries used
 

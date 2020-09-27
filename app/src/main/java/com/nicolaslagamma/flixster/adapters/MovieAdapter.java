@@ -20,8 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    Context context;
-    List<Movie> movies;
+    private Context context;
+    private List<Movie> movies;
+    private final int STANDARD = 0, POPULAR = 1;
 
     public MovieAdapter(Context context, List<Movie> movies) {
         this.context = context;
@@ -32,15 +33,36 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @NonNull
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new ViewHolder(movieView);
+        Log.d("MovieAdapter", "onCreateViewHolder " + viewType);
+        MovieAdapter.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        switch (viewType) {
+            case STANDARD:
+                View v1 = inflater.inflate(R.layout.item_movie1, parent, false);
+                viewHolder = new ViewHolder(v1);
+                break;
+            case POPULAR:
+                View v2 = inflater.inflate(R.layout.item_movie2, parent, false);
+                viewHolder = new ViewHolder(v2);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + viewType);
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (movies.get(position).getRating() > 5.0) {
+            return POPULAR;
+        }
+        return STANDARD;
     }
 
     // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(@NonNull MovieAdapter.ViewHolder holder, int position) {
-        Log.d("MovieAdapter", "onBindViewHolder" + position);
+        Log.d("MovieAdapter", "onBindViewHolder " + position);
         // Get the movie at the passed in position
         Movie movie = movies.get(position);
         //Bind the movie data into the ViewHolder
@@ -78,7 +100,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 // else imageUrl = poster image
                 imageUrl = movie.getPosterPath();
             }
-            Glide.with(context).load(imageUrl).into(ivPoster);
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.movie_placeholder)
+                    .error(R.drawable.movie_placeholder)
+                    .into(ivPoster);
         }
     }
 }

@@ -58,7 +58,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        if (movies.get(position).getRating() > 5.0) {
+        if (movies.get(position).isPopular()) {
             return POPULAR;
         }
         return STANDARD;

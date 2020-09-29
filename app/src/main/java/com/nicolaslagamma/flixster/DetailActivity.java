@@ -40,10 +40,10 @@ public class DetailActivity extends YouTubeBaseActivity {
         ratingBar = findViewById(R.id.ratingBar);
         youTubePlayerView = findViewById(R.id.player);
 
-        Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
+        final Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
-        ratingBar.setRating(movie.getRating());
+        ratingBar.setRating(movie.getRating().floatValue());
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(String.format(VIDEOS_URL, movie.getMovieId()), new JsonHttpResponseHandler() {
@@ -55,7 +55,7 @@ public class DetailActivity extends YouTubeBaseActivity {
                     if (results.length() == 0) return;
                     String youtubeKey = results.getJSONObject(0).getString("key");
                     Log.i(TAG, "Key: " + youtubeKey);
-                    initializeYoutube(youtubeKey);
+                    initializeYoutube(youtubeKey, movie.isPopular());
                 } catch (JSONException e) {
                     Log.e(TAG, "Failed to parse JSON", e);
                     e.printStackTrace();
@@ -68,12 +68,16 @@ public class DetailActivity extends YouTubeBaseActivity {
         });
     }
 
-    private void initializeYoutube(final String youtubeKey) {
+    private void initializeYoutube(final String youtubeKey, final boolean start) {
         youTubePlayerView.initialize(getString(R.string.youtube_api_key), new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 Log.d(TAG, "onInitializationSuccess");
-                youTubePlayer.cueVideo(youtubeKey);
+                if (start) {
+                    youTubePlayer.loadVideo(youtubeKey);
+                } else {
+                    youTubePlayer.cueVideo(youtubeKey);
+                }
             }
 
             @Override

@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.0"
+    dataBinding.enabled = true
 
     defaultConfig {
         applicationId "com.nicolaslagamma.flixsterapp"

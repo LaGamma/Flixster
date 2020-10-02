@@ -14,14 +14,7 @@
             android:id="@+id/player"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/ivPoster"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:visibility="gone"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:transitionName="display" />
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -44,7 +37,8 @@
             android:layout_marginBottom="10sp"
             android:textColor="#BFBFBF"
             android:textSize="30sp"
-            tools:text="It Chapter Two" />
+            tools:text="It Chapter Two"
+            android:transitionName="title"/>
 
         <TextView
             android:id="@+id/tvOverview"
@@ -53,7 +47,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:textColor="#BFBFBF"
-            tools:text="27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call." />
-
+            tools:text="27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call."
+            android:transitionName="overview"/>
     </LinearLayout>
 </layout>

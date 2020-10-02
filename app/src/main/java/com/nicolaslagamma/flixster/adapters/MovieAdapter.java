@@ -1,5 +1,6 @@
 package com.nicolaslagamma.flixster.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.nicolaslagamma.flixster.DetailActivity;
+import com.nicolaslagamma.flixster.MainActivity;
 import com.nicolaslagamma.flixster.R;
 import com.nicolaslagamma.flixster.models.Movie;
 
@@ -21,6 +23,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -122,8 +125,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 public void onClick(View view) {
                     // navigate to a new activity on tap
                     Intent i = new Intent(context, DetailActivity.class);
+                    // Pass data object in the bundle and populate details activity.
+                    //i.putExtra(DetailActivity.EXTRA_CONTACT, contact);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation((Activity) context, ivPoster, "display");
                     i.putExtra("movie", Parcels.wrap(movie));
-                    context.startActivity(i);
+                    context.startActivity(i, options.toBundle());
+
                 }
             });
         }

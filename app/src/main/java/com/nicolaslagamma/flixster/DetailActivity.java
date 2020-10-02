@@ -1,14 +1,18 @@
 package com.nicolaslagamma.flixster;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import okhttp3.Headers;
 
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -44,23 +48,31 @@ public class DetailActivity extends YouTubeBaseActivity {
                 Log.d(TAG, "onSuccess " + String.format(VIDEOS_URL, movie.getMovieId()));
                 try {
                     JSONArray results = json.jsonObject.getJSONArray("results");
+                    boolean found = false;
                     for (int i = 0; i < results.length(); i++) {
                         if (results.getJSONObject(i).getString("site").equals("YouTube")) {
                             String youtubeKey = results.getJSONObject(i).getString("key");
                             Log.i(TAG, "Key: " + youtubeKey);
                             initializeYoutube(youtubeKey, movie.isPopular());
-                            binding.player.setVisibility(View.VISIBLE);
+                            found = true;
                             break;
                         }
                     }
-                    if (binding.player.getVisibility() == View.GONE) {
+                    if (!found) {
                         // display backup image poster
                         Glide.with(getApplicationContext())
                                 .load(movie.getBackdropPath())
                                 .placeholder(R.drawable.movie_placeholder)
                                 .error(R.drawable.movie_placeholder)
-                                .into(binding.ivPoster);
-                        binding.ivPoster.setVisibility(View.VISIBLE);
+                                .into(new CustomTarget<Drawable>() {
+                                    @RequiresApi(api = Build.VERSION_CODES.M)
+                                    @Override
+                                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) { binding.player.setForeground(resource); }
+
+                                    @RequiresApi(api = Build.VERSION_CODES.M)
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) { binding.player.setForeground(placeholder); }
+                                });
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, "Failed to parse JSON", e);
@@ -72,6 +84,8 @@ public class DetailActivity extends YouTubeBaseActivity {
                 Log.d(TAG, "onFailure");
             }
         });
+
+
     }
 
     private void initializeYoutube(final String youtubeKey, final boolean start) {

@@ -5,7 +5,10 @@ import okhttp3.Headers;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -22,7 +25,7 @@ public class DetailActivity extends YouTubeBaseActivity {
 
     private ActivityDetailBinding binding;
     private static final String TAG = "DetailActivity";
-    public static final String VIDEOS_URL = "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    private static final String VIDEOS_URL = "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,20 @@ public class DetailActivity extends YouTubeBaseActivity {
         client.get(String.format(VIDEOS_URL, movie.getMovieId()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess");
+                Log.d(TAG, "onSuccess " + String.format(VIDEOS_URL, movie.getMovieId()));
                 try {
                     JSONArray results = json.jsonObject.getJSONArray("results");
-                    if (results.length() == 0) return;
+                    if (results.length() == 0) {
+                        // hide video player and display backup image poster
+                        binding.player.setVisibility(View.GONE);
+                        Glide.with(getApplicationContext())
+                                .load(movie.getBackdropPath())
+                                .placeholder(R.drawable.movie_placeholder)
+                                .error(R.drawable.movie_placeholder)
+                                .into(binding.ivPoster);
+                        binding.ivPoster.setVisibility(View.VISIBLE);
+                        return;
+                    };
                     String youtubeKey = results.getJSONObject(0).getString("key");
                     Log.i(TAG, "Key: " + youtubeKey);
                     initializeYoutube(youtubeKey, movie.isPopular());

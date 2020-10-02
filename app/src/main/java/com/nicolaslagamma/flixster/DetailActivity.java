@@ -44,20 +44,24 @@ public class DetailActivity extends YouTubeBaseActivity {
                 Log.d(TAG, "onSuccess " + String.format(VIDEOS_URL, movie.getMovieId()));
                 try {
                     JSONArray results = json.jsonObject.getJSONArray("results");
-                    if (results.length() == 0) {
-                        // hide video player and display backup image poster
-                        binding.player.setVisibility(View.GONE);
+                    for (int i = 0; i < results.length(); i++) {
+                        if (results.getJSONObject(i).getString("site").equals("YouTube")) {
+                            String youtubeKey = results.getJSONObject(i).getString("key");
+                            Log.i(TAG, "Key: " + youtubeKey);
+                            initializeYoutube(youtubeKey, movie.isPopular());
+                            binding.player.setVisibility(View.VISIBLE);
+                            break;
+                        }
+                    }
+                    if (binding.player.getVisibility() == View.GONE) {
+                        // display backup image poster
                         Glide.with(getApplicationContext())
                                 .load(movie.getBackdropPath())
                                 .placeholder(R.drawable.movie_placeholder)
                                 .error(R.drawable.movie_placeholder)
                                 .into(binding.ivPoster);
                         binding.ivPoster.setVisibility(View.VISIBLE);
-                        return;
-                    };
-                    String youtubeKey = results.getJSONObject(0).getString("key");
-                    Log.i(TAG, "Key: " + youtubeKey);
-                    initializeYoutube(youtubeKey, movie.isPopular());
+                    }
                 } catch (JSONException e) {
                     Log.e(TAG, "Failed to parse JSON", e);
                     e.printStackTrace();

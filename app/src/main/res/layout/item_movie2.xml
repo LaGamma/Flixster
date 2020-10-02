@@ -1,13 +1,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#001D33"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#001D33">
 
         <ImageView
             android:id="@+id/ivPoster"
@@ -21,9 +24,9 @@
             android:id="@+id/ivPlayButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/ivPoster"
             android:layout_alignBottom="@id/ivPoster"
+            android:layout_centerHorizontal="true"
             app:srcCompat="@drawable/yt_icon_rgb" />
 
         <TextView

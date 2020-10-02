@@ -7,7 +7,9 @@
         android:layout_height="wrap_content"
         android:background="#001D33"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <ImageView
             android:id="@+id/ivPoster"

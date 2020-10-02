@@ -22,6 +22,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
@@ -111,6 +112,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     .load(imageUrl)
                     .placeholder(R.drawable.movie_placeholder)
                     .error(R.drawable.movie_placeholder)
+                    .fitCenter()
+                    .transform(new RoundedCornersTransformation(60, 0))
                     .into(ivPoster);
 
             // register click listener on the whole row (container)

@@ -39,9 +39,16 @@ public class DetailActivity extends YouTubeBaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         final Movie movie = Parcels.unwrap(getIntent().getParcelableExtra("movie"));
-        binding.tvTitle.setText(movie.getTitle());
+
+        String release = "Release Date: " + movie.getReleaseDate();
+        String heading = movie.getTitle();
+        if (movie.getAdult()) {
+           heading += " (Adult)";
+        }
+        binding.tvTitle.setText(heading);
         binding.tvOverview.setText(movie.getOverview());
         binding.ratingBar.setRating(movie.getRating().floatValue());
+        binding.tvReleaseDate.setText(release);
 
         postponeEnterTransition();
         binding.player.getViewTreeObserver().addOnPreDrawListener(

@@ -50,9 +50,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="50dp"
                 android:textColor="#BFBFBF"
-                tools:text="27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call."
-                android:transitionName="overview"/>
+                android:transitionName="overview"
+                tools:text="27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call." />
 
         </LinearLayout>
     </ScrollView>

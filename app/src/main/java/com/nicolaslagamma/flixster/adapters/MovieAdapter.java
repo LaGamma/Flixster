@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.nicolaslagamma.flixster.DetailActivity;
-import com.nicolaslagamma.flixster.MainActivity;
 import com.nicolaslagamma.flixster.R;
 import com.nicolaslagamma.flixster.models.Movie;
 

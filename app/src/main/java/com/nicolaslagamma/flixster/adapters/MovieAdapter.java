@@ -8,13 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.nicolaslagamma.flixster.DetailActivity;
 import com.nicolaslagamma.flixster.R;
+import com.nicolaslagamma.flixster.databinding.ItemMovie1Binding;
+import com.nicolaslagamma.flixster.databinding.ItemMovie2Binding;
 import com.nicolaslagamma.flixster.models.Movie;
 
 import org.parceler.Parcels;
@@ -23,6 +22,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -42,21 +43,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MovieAdapter", "onCreateViewHolder " + viewType);
-        MovieAdapter.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(context);
         switch (viewType) {
             case STANDARD:
-                View v1 = inflater.inflate(R.layout.item_movie1, parent, false);
-                viewHolder = new ViewHolder(v1);
+                viewType = R.layout.item_movie1;
                 break;
             case POPULAR:
-                View v2 = inflater.inflate(R.layout.item_movie2, parent, false);
-                viewHolder = new ViewHolder(v2);
+                viewType = R.layout.item_movie2;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + viewType);
         }
-        return viewHolder;
+        ViewDataBinding binding = DataBindingUtil.inflate(inflater, viewType, parent, false);
+        return new ViewHolder(binding, viewType);
     }
 
     @Override
@@ -85,22 +84,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        RelativeLayout container;
-        TextView tvTitle;
-        TextView tvOverview;
-        ImageView ivPoster;
+        private ItemMovie1Binding binding1;
+        private ItemMovie2Binding binding2;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOverview = itemView.findViewById(R.id.tvOverview);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
-            container = itemView.findViewById(R.id.container);
+        public ViewHolder(ViewDataBinding binding, int viewType) {
+            super(binding.getRoot());
+            if (viewType == R.layout.item_movie1) {
+                this.binding1 = (ItemMovie1Binding) binding;
+            } else {
+                this.binding2 = (ItemMovie2Binding) binding;
+            }
         }
 
         public void bind(final Movie movie) {
-            tvTitle.setText(movie.getTitle());
-            tvOverview.setText(movie.getOverview());
             String imageUrl;
             // if phone is in landscape
             if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -110,29 +106,55 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 // else imageUrl = poster image
                 imageUrl = movie.getPosterPath();
             }
-            Glide.with(context)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.movie_placeholder)
-                    .error(R.drawable.movie_placeholder)
-                    .fitCenter()
-                    .transform(new RoundedCornersTransformation(60, 0))
-                    .into(ivPoster);
-
-            // register click listener on the whole row (container)
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // navigate to a new activity on tap
-                    Intent i = new Intent(context, DetailActivity.class);
-                    // Pass data object in the bundle and populate details activity.
-                    //i.putExtra(DetailActivity.EXTRA_CONTACT, contact);
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation((Activity) context, ivPoster, "display");
-                    i.putExtra("movie", Parcels.wrap(movie));
-                    context.startActivity(i, options.toBundle());
-
-                }
-            });
+            if (binding1 != null) {
+                binding1.tvTitle.setText(movie.getTitle());
+                binding1.tvOverview.setText(movie.getOverview());
+                Glide.with(context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.movie_placeholder)
+                        .error(R.drawable.movie_placeholder)
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(60, 0))
+                        .into(binding1.ivPoster);
+                // register click listener on the whole row (container)
+                binding1.container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // navigate to a new activity on tap
+                        Intent i = new Intent(context, DetailActivity.class);
+                        // Pass data object in the bundle and populate details activity.
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation((Activity) context, binding1.ivPoster, "display");
+                        i.putExtra("movie", Parcels.wrap(movie));
+                        context.startActivity(i, options.toBundle());
+                    }
+                });
+                binding1.executePendingBindings();
+            } else {
+                binding2.tvTitle.setText(movie.getTitle());
+                binding2.tvOverview.setText(movie.getOverview());
+                Glide.with(context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.movie_placeholder)
+                        .error(R.drawable.movie_placeholder)
+                        .fitCenter()
+                        .transform(new RoundedCornersTransformation(60, 0))
+                        .into(binding2.ivPoster);
+                // register click listener on the whole row (container)
+                binding2.container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // navigate to a new activity on tap
+                        Intent i = new Intent(context, DetailActivity.class);
+                        // Pass data object in the bundle and populate details activity.
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation((Activity) context, binding2.ivPoster, "display");
+                        i.putExtra("movie", Parcels.wrap(movie));
+                        context.startActivity(i, options.toBundle());
+                    }
+                });
+                binding2.executePendingBindings();
+            }
         }
     }
 }

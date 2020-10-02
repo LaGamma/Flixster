@@ -21,6 +21,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.nicolaslagamma.flixster.databinding.ActivityDetailBinding;
 import com.nicolaslagamma.flixster.models.Movie;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -67,7 +68,7 @@ public class DetailActivity extends YouTubeBaseActivity {
                                 .into(new CustomTarget<Drawable>() {
                                     @RequiresApi(api = Build.VERSION_CODES.M)
                                     @Override
-                                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) { binding.player.setForeground(resource); }
+                                    public void onResourceReady(@NotNull Drawable resource, Transition<? super Drawable> transition) { binding.player.setForeground(resource); }
 
                                     @RequiresApi(api = Build.VERSION_CODES.M)
                                     @Override
